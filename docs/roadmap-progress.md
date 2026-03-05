@@ -30,3 +30,6 @@
 ## Commit 11
 - feat(core): add support for multiple worker nodes in the mesh
 
+## Commit 12
+- feat(core): implement secure TLS communication between nodes
+
