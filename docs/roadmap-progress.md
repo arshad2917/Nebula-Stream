@@ -48,3 +48,6 @@
 ## Commit 17
 - feat(runtime): integrate Wasmtime for serverless function execution
 
+## Commit 18
+- feat(runtime): implement secure sandbox for WASM plugins
+
