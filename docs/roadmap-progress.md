@@ -33,3 +33,6 @@
 ## Commit 12
 - feat(core): implement secure TLS communication between nodes
 
+## Commit 13
+- fix: handle NATS connection drops and auto-reconnect
+
