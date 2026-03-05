@@ -18,3 +18,6 @@
 ## Commit 7
 - feat(cli): add nebula-cli for node health monitoring
 
+## Commit 8
+- feat: implement retry and dead-letter-queue for failed events
+
