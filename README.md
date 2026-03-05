@@ -75,3 +75,7 @@ TBD
 ## System Architecture
 
 Nebula-Stream uses an event-driven control plane with distributed workers and WASM runtime sandboxes.
+
+## Media
+
+Screenshots and GIF badges will be published in the next iteration.

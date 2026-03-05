@@ -135,3 +135,6 @@
 ## Commit 46
 - perf: benchmark report (achieved 50k events per second)
 
+## Commit 47
+- docs: final README with screenshots, GIFs and badges
+
