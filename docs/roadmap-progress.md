@@ -21,3 +21,6 @@
 ## Commit 8
 - feat: implement retry and dead-letter-queue for failed events
 
+## Commit 9
+- refactor: optimize message serialization using protobuf
+
