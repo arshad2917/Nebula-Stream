@@ -93,3 +93,6 @@
 ## Commit 32
 - feat(core): implement dynamic load balancing across workers
 
+## Commit 33
+- refactor: optimize data buffer management for large payloads
+
