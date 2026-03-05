@@ -84,3 +84,6 @@
 ## Commit 29
 - fix: memory leak in WASM execution context
 
+## Commit 30
+- feat(engine): implement state persistence across workflow steps
+
