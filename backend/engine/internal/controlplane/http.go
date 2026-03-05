@@ -1,23 +1,32 @@
 package controlplane
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
+	"time"
 
+	"github.com/nebula-stream/engine/internal/bus"
 	"github.com/nebula-stream/engine/internal/state"
 	"github.com/nebula-stream/engine/internal/workflow"
 )
 
+type EventPublisher interface {
+	Publish(ctx context.Context, subject string, event bus.EventEnvelope) error
+}
+
 type Server struct {
 	registry *workflow.Registry
 	store    state.Store
+	pub      EventPublisher
+	subject  string
 }
 
-func NewServer(registry *workflow.Registry, store state.Store) *Server {
-	return &Server{registry: registry, store: store}
+func NewServer(registry *workflow.Registry, store state.Store, pub EventPublisher, subject string) *Server {
+	return &Server{registry: registry, store: store, pub: pub, subject: subject}
 }
 
 func (s *Server) Handler() http.Handler {
@@ -26,6 +35,7 @@ func (s *Server) Handler() http.Handler {
 	mux.HandleFunc("/api/v1/workflows", s.handleWorkflows)
 	mux.HandleFunc("/api/v1/executions/latest", s.handleLatestExecution)
 	mux.HandleFunc("/api/v1/executions/", s.handleExecutionByID)
+	mux.HandleFunc("/api/v1/triggers", s.handleTrigger)
 	return mux
 }
 
@@ -130,6 +140,75 @@ func (s *Server) handleLatestExecution(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	_, _ = w.Write(raw)
+}
+
+type triggerRequest struct {
+	Workflow string         `json:"workflow"`
+	Topic    string         `json:"topic"`
+	Payload  map[string]any `json:"payload"`
+}
+
+func (s *Server) handleTrigger(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	if s.pub == nil {
+		writeErr(w, http.StatusServiceUnavailable, fmt.Errorf("event publisher is not configured"))
+		return
+	}
+
+	var req triggerRequest
+	if err := json.NewDecoder(io.LimitReader(r.Body, 1<<20)).Decode(&req); err != nil {
+		writeErr(w, http.StatusBadRequest, fmt.Errorf("decode trigger request: %w", err))
+		return
+	}
+
+	workflowName := req.Workflow
+	if workflowName == "" {
+		active, ok := s.registry.Active()
+		if !ok {
+			writeErr(w, http.StatusBadRequest, fmt.Errorf("workflow is required when no active workflow exists"))
+			return
+		}
+		workflowName = active.Name
+	}
+
+	topic := req.Topic
+	if topic == "" {
+		topic = fmt.Sprintf("workflow.%s.run", workflowName)
+	}
+
+	rawPayload, err := json.Marshal(req.Payload)
+	if err != nil {
+		writeErr(w, http.StatusBadRequest, fmt.Errorf("encode payload: %w", err))
+		return
+	}
+
+	eventID := fmt.Sprintf("evt-%d", time.Now().UnixNano())
+	event := bus.EventEnvelope{
+		ID:        eventID,
+		Topic:     topic,
+		Payload:   rawPayload,
+		CreatedAt: time.Now().UTC(),
+		Meta: map[string]string{
+			"source":   "controlplane",
+			"workflow": workflowName,
+		},
+	}
+
+	if err := s.pub.Publish(r.Context(), s.subject, event); err != nil {
+		writeErr(w, http.StatusBadGateway, fmt.Errorf("publish trigger event: %w", err))
+		return
+	}
+
+	writeJSON(w, http.StatusAccepted, map[string]string{
+		"status":   "accepted",
+		"event_id": eventID,
+		"workflow": workflowName,
+		"topic":    topic,
+	})
 }
 
 func writeErr(w http.ResponseWriter, status int, err error) {

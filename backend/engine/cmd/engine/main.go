@@ -36,7 +36,7 @@ func main() {
 	}
 	defer busClient.Close()
 
-	api := controlplane.NewServer(registry, store)
+	api := controlplane.NewServer(registry, store, busClient, cfg.IngestSubject)
 	httpServer := &http.Server{
 		Addr:    cfg.APIAddr,
 		Handler: api.Handler(),

@@ -76,6 +76,25 @@ type ExecutionRecord = {
   results: ExecutionResult[]
 }
 
+export async function triggerWorkflow(engineURL: string, workflow: string, message: string) {
+  const url = `${engineURL.replace(/\/$/, '')}/api/v1/triggers`
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      workflow,
+      payload: { message },
+    }),
+  })
+
+  if (!resp.ok) {
+    const body = await resp.text()
+    throw new Error(`trigger failed status=${resp.status} body=${body}`)
+  }
+
+  return (await resp.json()) as { event_id: string; workflow: string; topic: string }
+}
+
 function toNode(stepType: string): string {
   if (stepType.startsWith('wasm')) {
     return 'wasm'

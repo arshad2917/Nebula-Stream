@@ -75,6 +75,34 @@ h1 {
   gap: 0.9rem;
 }
 
+.trigger-panel {
+  margin-top: 1rem;
+}
+
+.trigger-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.95rem 1rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+}
+
+.trigger-btn {
+  border: 1px solid #4e8fc2;
+  color: #e5f5ff;
+  background: linear-gradient(180deg, #1b4f75, #174262);
+  border-radius: 10px;
+  padding: 0.55rem 0.8rem;
+  font-family: inherit;
+  font-size: 0.86rem;
+  cursor: pointer;
+}
+
+.trigger-btn:hover {
+  filter: brightness(1.08);
+}
+
 .stat-card {
   background: linear-gradient(160deg, #17314a, #13273a);
   border: 1px solid var(--panel-border);

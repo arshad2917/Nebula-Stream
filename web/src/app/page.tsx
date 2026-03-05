@@ -1,7 +1,8 @@
 'use client'
 
+import { useState } from 'react'
 import { WorkflowCanvas } from '@/react-flow'
-import { useTelemetryFeed } from '@/telemetry-socket'
+import { triggerWorkflow, useTelemetryFeed } from '@/telemetry-socket'
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
@@ -14,6 +15,18 @@ function StatCard({ label, value }: { label: string; value: string }) {
 
 export default function Page() {
   const telemetry = useTelemetryFeed()
+  const [triggerStatus, setTriggerStatus] = useState('')
+
+  const handleTrigger = async () => {
+    const engineURL = process.env.NEXT_PUBLIC_ENGINE_URL || 'http://127.0.0.1:8080'
+    try {
+      const result = await triggerWorkflow(engineURL, telemetry.activeWorkflow, 'dashboard manual trigger')
+      setTriggerStatus(`triggered event ${result.event_id}`)
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'unknown trigger error'
+      setTriggerStatus(msg)
+    }
+  }
 
   return (
     <main className="page-shell">
@@ -24,6 +37,19 @@ export default function Page() {
         </div>
         <span className="chip">{telemetry.mode === 'live' ? 'Live Engine Data' : 'Mock Telemetry'}</span>
       </header>
+
+      <section className="panel trigger-panel">
+        <div className="panel-head">
+          <h2>Manual Trigger</h2>
+          <p>Send one event to the active workflow via control-plane API</p>
+        </div>
+        <div className="trigger-actions">
+          <button onClick={handleTrigger} type="button" className="trigger-btn">
+            Trigger {telemetry.activeWorkflow}
+          </button>
+          <span>{triggerStatus || 'waiting'}</span>
+        </div>
+      </section>
 
       <section className="stat-grid">
         <StatCard label="Event Throughput" value={`${telemetry.throughput}/sec`} />
