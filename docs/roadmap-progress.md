@@ -15,3 +15,6 @@
 ## Commit 6
 - test: unit tests for internal messaging reliability
 
+## Commit 7
+- feat(cli): add nebula-cli for node health monitoring
+
