@@ -20,6 +20,8 @@ Nebula-Stream is an event-driven orchestration platform for microservices, AI wo
 
 Nebula-Stream follows an event-driven control plane with distributed execution workers.
 
+![Nebula-Stream Architecture](docs/media/architecture.svg)
+
 ```text
 Trigger/API -> Orchestrator Core (Go) -> NATS Event Bus -> Worker Mesh
                                                 |              |
@@ -85,6 +87,19 @@ go run ./backend/cli/cmd/nebula-cli
 
 See `workflows/examples/hello-world.yaml` for a minimal trigger + step definition.
 
+Execution flow example:
+
+```mermaid
+flowchart LR
+    A[External Trigger] --> B[Orchestrator]
+    B --> C[NATS Topic]
+    C --> D[WASM Step]
+    C --> E[AI Worker]
+    D --> F[State Store]
+    E --> F
+    F --> G[Callback or Notification]
+```
+
 ## Performance Target
 
 - Synthetic benchmark target: **50,000 events/second**.
@@ -104,6 +119,12 @@ Commit-by-commit progress log: `docs/roadmap-progress.md`.
 
 - Current milestone: **v1.0.0-beta - The First Constellation**
 - Changelog: `CHANGELOG.md`
+
+## Media Kit
+
+- Architecture asset: `docs/media/architecture.svg`
+- Dashboard placeholder: `docs/media/dashboard-placeholder.svg`
+- Release note source: `docs/releases/v1.0.0-beta.md`
 
 ## License
 

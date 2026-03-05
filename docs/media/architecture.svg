@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560" role="img" aria-label="Nebula-Stream architecture diagram">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#081221" />
+      <stop offset="100%" stop-color="#0f2742" />
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#122b4a" />
+      <stop offset="100%" stop-color="#173a5e" />
+    </linearGradient>
+    <style>
+      .title { font: 700 34px sans-serif; fill: #eaf3ff; }
+      .subtitle { font: 500 16px sans-serif; fill: #9dc0e5; }
+      .label { font: 600 15px sans-serif; fill: #eaf3ff; }
+      .small { font: 500 13px sans-serif; fill: #b9d3ee; }
+      .line { stroke: #71c0ff; stroke-width: 2.5; fill: none; }
+      .box { fill: url(#card); stroke: #5da9e8; stroke-width: 1.5; rx: 12; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L9,3 L0,6 z" fill="#71c0ff" />
+    </marker>
+  </defs>
+
+  <rect width="1200" height="560" fill="url(#bg)" />
+  <text x="60" y="66" class="title">Nebula-Stream</text>
+  <text x="60" y="92" class="subtitle">Edge-to-Cloud Distributed AI Orchestration</text>
+
+  <rect class="box" x="70" y="170" width="170" height="82" />
+  <text x="94" y="205" class="label">External Trigger</text>
+  <text x="105" y="226" class="small">API / CLI</text>
+
+  <rect class="box" x="300" y="160" width="230" height="102" />
+  <text x="335" y="200" class="label">Orchestrator Core</text>
+  <text x="372" y="223" class="small">Go Scheduler</text>
+
+  <rect class="box" x="600" y="160" width="220" height="102" />
+  <text x="666" y="200" class="label">NATS Bus</text>
+  <text x="640" y="223" class="small">JetStream + DLQ</text>
+
+  <rect class="box" x="900" y="95" width="220" height="102" />
+  <text x="952" y="136" class="label">WASM Runtime</text>
+  <text x="943" y="159" class="small">Wasmtime Sandbox</text>
+
+  <rect class="box" x="900" y="235" width="220" height="102" />
+  <text x="952" y="276" class="label">AI Worker</text>
+  <text x="972" y="299" class="small">ONNX Node</text>
+
+  <rect class="box" x="900" y="375" width="220" height="102" />
+  <text x="937" y="416" class="label">Telemetry Plane</text>
+  <text x="922" y="439" class="small">OTel + Prometheus + UI</text>
+
+  <path class="line" marker-end="url(#arrow)" d="M240 211 L300 211" />
+  <path class="line" marker-end="url(#arrow)" d="M530 211 L600 211" />
+  <path class="line" marker-end="url(#arrow)" d="M820 200 L900 145" />
+  <path class="line" marker-end="url(#arrow)" d="M820 220 L900 285" />
+  <path class="line" marker-end="url(#arrow)" d="M710 262 L710 426 L900 426" />
+
+  <text x="68" y="528" class="small">v1.0.0-beta architecture snapshot</text>
+</svg>
