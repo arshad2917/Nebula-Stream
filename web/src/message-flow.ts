@@ -1,1 +1,6 @@
-export type EdgeMessage = { from: string; to: string }
+export type EdgeMessage = {
+  id: string
+  from: string
+  to: string
+  at: number
+}

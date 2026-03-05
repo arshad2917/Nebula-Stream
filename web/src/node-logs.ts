@@ -1,1 +1,9 @@
-export type NodeLog = { nodeId: string; level: string; message: string }
+export type NodeLogLevel = 'info' | 'warn' | 'error'
+
+export type NodeLog = {
+  id: string
+  nodeId: string
+  level: NodeLogLevel
+  message: string
+  at: number
+}

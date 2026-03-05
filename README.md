@@ -114,6 +114,16 @@ flowchart LR
     F --> G[Callback or Notification]
 ```
 
+## Dashboard Demo
+
+The dashboard demo now runs from `web/` with React Flow and mock live telemetry.
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
 ## Performance Target
 
 - Synthetic benchmark target: **50,000 events/second**.

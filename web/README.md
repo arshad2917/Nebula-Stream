@@ -1,9 +1,19 @@
-# Nebula Dashboard (Planned)
+# Nebula Dashboard
 
-Next.js + React Flow dashboard will live here.
+This package contains a running Next.js demo for Nebula-Stream workflow visualization.
 
-Planned capabilities:
+## Features in this iteration
 
-- Visual workflow editor
-- Real-time node telemetry
-- Distributed trace visualization
+- React Flow based pipeline graph
+- Mock real-time telemetry stream
+- Throughput, node count, latency, and error widgets
+- Live node log feed panel
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open `http://localhost:3000`.
