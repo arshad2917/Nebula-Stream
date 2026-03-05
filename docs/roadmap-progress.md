@@ -126,3 +126,6 @@
 ## Commit 43
 - feat(security): implement API-key and role-based access control
 
+## Commit 44
+- fix(ui): improve node-canvas performance for 100+ nodes
+
