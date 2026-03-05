@@ -45,3 +45,6 @@
 ## Commit 16
 - feat(engine): implement YAML-based workflow parser
 
+## Commit 17
+- feat(runtime): integrate Wasmtime for serverless function execution
+
