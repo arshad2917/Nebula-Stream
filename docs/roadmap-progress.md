@@ -6,3 +6,6 @@
 ## Commit 3
 - feat(core): define protobuf schema for internal messages
 
+## Commit 4
+- feat(core): implement "node" registration and heartbeat mechanism
+
