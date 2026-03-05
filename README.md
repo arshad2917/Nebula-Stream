@@ -142,6 +142,12 @@ npm run dev
 
 - Showcase thread: `https://github.com/erciktiburak/Nebula-Stream/discussions/1`
 - Roadmap voting poll: `https://github.com/erciktiburak/Nebula-Stream/discussions/2`
+- All discussions: `https://github.com/erciktiburak/Nebula-Stream/discussions`
+
+Weekly maintainer cadence:
+
+- Feature one community showcase every week.
+- Convert top-voted roadmap requests into milestone issues.
 
 ## Performance Target
 
