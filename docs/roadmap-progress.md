@@ -51,3 +51,6 @@
 ## Commit 18
 - feat(runtime): implement secure sandbox for WASM plugins
 
+## Commit 19
+- feat(engine): implement sequential task execution (pipeline)
+
