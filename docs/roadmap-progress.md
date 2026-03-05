@@ -123,3 +123,6 @@
 ## Commit 42
 - feat(ui): add visual logs and error reporting per node
 
+## Commit 43
+- feat(security): implement API-key and role-based access control
+
