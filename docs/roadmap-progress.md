@@ -105,3 +105,6 @@
 ## Commit 36
 - feat(ui): setup next.js project with shadcn/ui
 
+## Commit 37
+- feat(ui): integrate react-flow for visual workflow builder
+
