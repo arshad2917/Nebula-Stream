@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package nebula.v1;
+
+service TriggerService {
+  rpc TriggerEvent(EventEnvelope) returns (TriggerReply);
+}
+
+message TriggerReply {
+  string accepted_id = 1;
+}

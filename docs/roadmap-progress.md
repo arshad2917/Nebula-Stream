@@ -66,3 +66,6 @@
 ## Commit 23
 - feat(ai): implement pre-trained image classification worker
 
+## Commit 24
+- feat(api): add gRPC gateway for external event triggers
+
