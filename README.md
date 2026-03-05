@@ -103,7 +103,7 @@ CLI command examples:
 ```bash
 go run ./backend/cli/cmd/nebula-cli health --node edge-a1
 go run ./backend/cli/cmd/nebula-cli deploy -f workflows/examples/hello-world.yaml --engine-url http://127.0.0.1:8080
-go run ./backend/cli/cmd/nebula-cli trigger --topic workflow.hello --payload '{"message":"from-cli"}'
+go run ./backend/cli/cmd/nebula-cli trigger --workflow hello-world --topic workflow.hello-world.run --payload '{"message":"from-cli"}'
 ```
 
 Control-plane API:
@@ -111,6 +111,7 @@ Control-plane API:
 - `GET /healthz`
 - `GET /api/v1/workflows`
 - `POST /api/v1/workflows` (YAML body)
+- `GET /api/v1/executions/{eventID}`
 
 End-to-end local event test:
 

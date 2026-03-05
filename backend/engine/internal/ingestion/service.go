@@ -2,12 +2,15 @@ package ingestion
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"strings"
+	"time"
 
 	"github.com/nebula-stream/engine/internal/bus"
 	"github.com/nebula-stream/engine/internal/engine"
+	"github.com/nebula-stream/engine/internal/state"
 	"github.com/nebula-stream/engine/internal/workflow"
 )
 
@@ -15,13 +18,15 @@ type Service struct {
 	busClient *bus.Client
 	registry  *workflow.Registry
 	runner    *engine.Runner
+	store     state.Store
 }
 
-func NewService(busClient *bus.Client, registry *workflow.Registry) *Service {
+func NewService(busClient *bus.Client, registry *workflow.Registry, store state.Store) *Service {
 	return &Service{
 		busClient: busClient,
 		registry:  registry,
 		runner:    engine.NewRunner(),
+		store:     store,
 	}
 }
 
@@ -60,9 +65,50 @@ func (s *Service) handle(event bus.EventEnvelope) error {
 		return err
 	}
 
+	if err := s.persistExecution(def.Name, event, results); err != nil {
+		return err
+	}
+
 	log.Printf("workflow executed name=%s steps=%d", def.Name, len(results))
 
 	return nil
+}
+
+func (s *Service) persistExecution(workflowName string, event bus.EventEnvelope, results map[string]engine.StepResult) error {
+	if s.store == nil {
+		return nil
+	}
+
+	record := map[string]any{
+		"event_id":    event.ID,
+		"workflow":    workflowName,
+		"topic":       event.Topic,
+		"executed_at": time.Now().UTC(),
+		"results":     results,
+	}
+
+	raw, err := json.Marshal(record)
+	if err != nil {
+		return fmt.Errorf("marshal execution record: %w", err)
+	}
+
+	if err := s.store.Save(executionKey(event.ID), raw); err != nil {
+		return fmt.Errorf("save execution record: %w", err)
+	}
+
+	if err := s.store.Save(latestExecutionKey(workflowName), raw); err != nil {
+		return fmt.Errorf("save latest execution record: %w", err)
+	}
+
+	return nil
+}
+
+func executionKey(eventID string) string {
+	return fmt.Sprintf("execution:%s", eventID)
+}
+
+func latestExecutionKey(workflowName string) string {
+	return fmt.Sprintf("workflow:%s:latest", workflowName)
 }
 
 func (s *Service) resolveWorkflow(event bus.EventEnvelope) (workflow.Definition, error) {

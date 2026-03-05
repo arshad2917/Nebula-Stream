@@ -53,3 +53,27 @@ func TestRunnerUnknownStepType(t *testing.T) {
 		t.Fatalf("expected ErrUnknownStepType, got %v", err)
 	}
 }
+
+func TestRunnerPayloadFallbackForBuiltinLog(t *testing.T) {
+	runner := NewRunner()
+	def := workflow.Definition{
+		Version: "v1",
+		Name:    "payload",
+		Triggers: []workflow.Trigger{
+			{Type: "manual"},
+		},
+		Steps: []workflow.Step{
+			{ID: "log", Type: "builtin.log"},
+		},
+	}
+
+	results, err := runner.Execute(context.Background(), def, bus.EventEnvelope{ID: "evt-3", Topic: "workflow.hello", Payload: []byte(`{"message":"hello from payload"}`)})
+	if err != nil {
+		t.Fatalf("execute workflow: %v", err)
+	}
+
+	output, _ := results["log"].Output["message"].(string)
+	if output != "hello from payload" {
+		t.Fatalf("expected payload-driven message, got %q", output)
+	}
+}

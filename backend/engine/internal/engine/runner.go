@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -17,6 +18,7 @@ type StepContext struct {
 	Event bus.EventEnvelope
 	Step  workflow.Step
 	State map[string]any
+	Input map[string]any
 }
 
 type StepResult struct {
@@ -44,6 +46,7 @@ func (r *Runner) Register(kind string, handler StepHandler) {
 func (r *Runner) Execute(ctx context.Context, def workflow.Definition, event bus.EventEnvelope) (map[string]StepResult, error) {
 	results := make(map[string]StepResult, len(def.Steps))
 	state := make(map[string]any)
+	payload := decodePayloadMap(event.Payload)
 
 	for _, step := range def.Steps {
 		handler, ok := r.selectHandler(step.Type)
@@ -51,7 +54,9 @@ func (r *Runner) Execute(ctx context.Context, def workflow.Definition, event bus
 			return nil, fmt.Errorf("%w: %s", ErrUnknownStepType, step.Type)
 		}
 
-		result, err := handler(ctx, StepContext{Event: event, Step: step, State: state})
+		input := mergeStepInput(step.Input, payload, state)
+
+		result, err := handler(ctx, StepContext{Event: event, Step: step, State: state, Input: input})
 		if err != nil {
 			return nil, fmt.Errorf("run step %s (%s): %w", step.ID, step.Type, err)
 		}
@@ -61,6 +66,30 @@ func (r *Runner) Execute(ctx context.Context, def workflow.Definition, event bus
 	}
 
 	return results, nil
+}
+
+func decodePayloadMap(raw []byte) map[string]any {
+	if len(raw) == 0 {
+		return map[string]any{}
+	}
+
+	var payload map[string]any
+	if err := json.Unmarshal(raw, &payload); err != nil {
+		return map[string]any{}
+	}
+
+	return payload
+}
+
+func mergeStepInput(stepInput map[string]any, payload map[string]any, state map[string]any) map[string]any {
+	input := make(map[string]any, len(stepInput)+2)
+	for k, v := range stepInput {
+		input[k] = v
+	}
+
+	input["event"] = payload
+	input["state"] = state
+	return input
 }
 
 func (r *Runner) selectHandler(stepType string) (StepHandler, bool) {
@@ -79,7 +108,13 @@ func (r *Runner) selectHandler(stepType string) (StepHandler, bool) {
 }
 
 func builtinLogHandler(_ context.Context, stepCtx StepContext) (StepResult, error) {
-	message, _ := stepCtx.Step.Input["message"].(string)
+	message, _ := stepCtx.Input["message"].(string)
+	if message == "" {
+		eventPayload, _ := stepCtx.Input["event"].(map[string]any)
+		if payloadMessage, _ := eventPayload["message"].(string); payloadMessage != "" {
+			message = payloadMessage
+		}
+	}
 	if message == "" {
 		message = fmt.Sprintf("event topic=%s payload=%dB", stepCtx.Event.Topic, len(stepCtx.Event.Payload))
 	}
@@ -90,7 +125,7 @@ func builtinLogHandler(_ context.Context, stepCtx StepContext) (StepResult, erro
 }
 
 func wasmPlaceholderHandler(_ context.Context, stepCtx StepContext) (StepResult, error) {
-	module, _ := stepCtx.Step.Input["module"].(string)
+	module, _ := stepCtx.Input["module"].(string)
 	if module == "" {
 		module = "default.wasm"
 	}
@@ -100,7 +135,7 @@ func wasmPlaceholderHandler(_ context.Context, stepCtx StepContext) (StepResult,
 }
 
 func aiPlaceholderHandler(_ context.Context, stepCtx StepContext) (StepResult, error) {
-	model, _ := stepCtx.Step.Input["model"].(string)
+	model, _ := stepCtx.Input["model"].(string)
 	if model == "" {
 		model = "onnx-default"
 	}

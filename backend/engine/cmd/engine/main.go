@@ -11,6 +11,7 @@ import (
 	"github.com/nebula-stream/engine/internal/config"
 	"github.com/nebula-stream/engine/internal/controlplane"
 	"github.com/nebula-stream/engine/internal/ingestion"
+	"github.com/nebula-stream/engine/internal/state"
 	"github.com/nebula-stream/engine/internal/workflow"
 )
 
@@ -27,6 +28,7 @@ func main() {
 	}
 
 	registry := workflow.NewRegistry(def)
+	store := state.NewMemoryStore()
 
 	busClient, err := bus.Connect(cfg.NATSURL)
 	if err != nil {
@@ -34,7 +36,7 @@ func main() {
 	}
 	defer busClient.Close()
 
-	api := controlplane.NewServer(registry)
+	api := controlplane.NewServer(registry, store)
 	httpServer := &http.Server{
 		Addr:    cfg.APIAddr,
 		Handler: api.Handler(),
@@ -47,7 +49,7 @@ func main() {
 		}
 	}()
 
-	svc := ingestion.NewService(busClient, registry)
+	svc := ingestion.NewService(busClient, registry, store)
 
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()

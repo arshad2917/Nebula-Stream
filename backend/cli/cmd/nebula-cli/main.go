@@ -117,16 +117,18 @@ func deployWorkflow(engineURL string, raw []byte) error {
 func runTrigger(args []string) error {
 	fs := flag.NewFlagSet("trigger", flag.ContinueOnError)
 	var (
-		natsURL string
-		subject string
-		topic   string
-		payload string
+		natsURL      string
+		subject      string
+		topic        string
+		payload      string
+		workflowName string
 	)
 
 	fs.StringVar(&natsURL, "nats", "nats://127.0.0.1:4222", "nats server URL")
 	fs.StringVar(&subject, "subject", "nebula.events.ingest", "ingestion subject")
 	fs.StringVar(&topic, "topic", "workflow.hello", "event topic")
 	fs.StringVar(&payload, "payload", "{}", "event payload as JSON string")
+	fs.StringVar(&workflowName, "workflow", "", "target workflow name")
 
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -138,14 +140,17 @@ func runTrigger(args []string) error {
 	}
 	defer conn.Close()
 
+	meta := map[string]string{"source": "nebula-cli"}
+	if workflowName != "" {
+		meta["workflow"] = workflowName
+	}
+
 	envelope := map[string]any{
 		"id":         fmt.Sprintf("evt-%d", time.Now().UnixNano()),
 		"topic":      topic,
 		"payload":    []byte(payload),
 		"created_at": time.Now().UTC(),
-		"meta": map[string]string{
-			"source": "nebula-cli",
-		},
+		"meta":       meta,
 	}
 
 	raw, err := json.Marshal(envelope)

@@ -5,22 +5,26 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 
+	"github.com/nebula-stream/engine/internal/state"
 	"github.com/nebula-stream/engine/internal/workflow"
 )
 
 type Server struct {
 	registry *workflow.Registry
+	store    state.Store
 }
 
-func NewServer(registry *workflow.Registry) *Server {
-	return &Server{registry: registry}
+func NewServer(registry *workflow.Registry, store state.Store) *Server {
+	return &Server{registry: registry, store: store}
 }
 
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/healthz", s.handleHealth)
 	mux.HandleFunc("/api/v1/workflows", s.handleWorkflows)
+	mux.HandleFunc("/api/v1/executions/", s.handleExecutionByID)
 	return mux
 }
 
@@ -65,6 +69,34 @@ func (s *Server) handleWorkflowDeploy(w http.ResponseWriter, r *http.Request) {
 		"status":   "accepted",
 		"workflow": def.Name,
 	})
+}
+
+func (s *Server) handleExecutionByID(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+
+	id := strings.TrimPrefix(r.URL.Path, "/api/v1/executions/")
+	if id == "" {
+		writeErr(w, http.StatusBadRequest, fmt.Errorf("execution id is required"))
+		return
+	}
+
+	if s.store == nil {
+		writeErr(w, http.StatusNotFound, fmt.Errorf("state store is not configured"))
+		return
+	}
+
+	raw, err := s.store.Load("execution:" + id)
+	if err != nil {
+		writeErr(w, http.StatusNotFound, err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(raw)
 }
 
 func writeErr(w http.ResponseWriter, status int, err error) {
