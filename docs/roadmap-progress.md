@@ -87,3 +87,6 @@
 ## Commit 30
 - feat(engine): implement state persistence across workflow steps
 
+## Commit 31
+- feat(cli): add command to deploy workflows via YAML
+
