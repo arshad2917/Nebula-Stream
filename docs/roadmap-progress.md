@@ -120,3 +120,6 @@
 ## Commit 41
 - feat(api): add prometheus metrics exporter for cluster health
 
+## Commit 42
+- feat(ui): add visual logs and error reporting per node
+
