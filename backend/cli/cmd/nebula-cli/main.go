@@ -6,6 +6,8 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -60,8 +62,10 @@ func runHealth(args []string) error {
 func runDeploy(args []string) error {
 	fs := flag.NewFlagSet("deploy", flag.ContinueOnError)
 	var file string
+	var engineURL string
 	fs.StringVar(&file, "file", "", "workflow yaml path")
 	fs.StringVar(&file, "f", "", "workflow yaml path (shorthand)")
+	fs.StringVar(&engineURL, "engine-url", "http://127.0.0.1:8080", "engine control-plane base url")
 
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -75,8 +79,38 @@ func runDeploy(args []string) error {
 		return err
 	}
 
-	fmt.Printf("workflow accepted: %s\n", file)
-	fmt.Println("deployment request queued")
+	raw, err := os.ReadFile(file)
+	if err != nil {
+		return fmt.Errorf("read workflow file: %w", err)
+	}
+
+	if err := deployWorkflow(engineURL, raw); err != nil {
+		return err
+	}
+
+	fmt.Printf("workflow deployed: %s -> %s\n", file, engineURL)
+	return nil
+}
+
+func deployWorkflow(engineURL string, raw []byte) error {
+	url := strings.TrimRight(engineURL, "/") + "/api/v1/workflows"
+	req, err := http.NewRequest(http.MethodPost, url, strings.NewReader(string(raw)))
+	if err != nil {
+		return fmt.Errorf("build deploy request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/x-yaml")
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return fmt.Errorf("send deploy request: %w", err)
+	}
+	defer resp.Body.Close()
+
+	body, _ := io.ReadAll(io.LimitReader(resp.Body, 1<<20))
+	if resp.StatusCode != http.StatusAccepted {
+		return fmt.Errorf("deploy failed status=%d body=%s", resp.StatusCode, strings.TrimSpace(string(body)))
+	}
+
 	return nil
 }
 
@@ -153,6 +187,6 @@ func validateWorkflowFile(path string) error {
 func printUsage() {
 	fmt.Println("nebula-cli commands:")
 	fmt.Println("  health [--node <id>]          Show health status for a node")
-	fmt.Println("  deploy -f <workflow.yaml>     Validate and queue workflow deployment")
+	fmt.Println("  deploy -f <workflow.yaml>     Validate and deploy workflow to engine")
 	fmt.Println("  trigger [flags]               Publish workflow event to NATS")
 }

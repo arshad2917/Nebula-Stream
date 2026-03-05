@@ -12,6 +12,7 @@ type Config struct {
 	HeartbeatSecs int
 	WorkflowPath  string
 	IngestSubject string
+	APIAddr       string
 }
 
 func Load() (Config, error) {
@@ -21,6 +22,7 @@ func Load() (Config, error) {
 		HeartbeatSecs: 5,
 		WorkflowPath:  getEnv("NEBULA_WORKFLOW_PATH", "workflows/examples/hello-world.yaml"),
 		IngestSubject: getEnv("NEBULA_INGEST_SUBJECT", "nebula.events.ingest"),
+		APIAddr:       getEnv("NEBULA_API_ADDR", ":8080"),
 	}
 
 	if v := os.Getenv("NEBULA_HEARTBEAT_SECONDS"); v != "" {

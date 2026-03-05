@@ -1,6 +1,8 @@
 package main
 
 import (
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"testing"
@@ -14,7 +16,15 @@ func TestRunDeployValidation(t *testing.T) {
 		t.Fatalf("write workflow: %v", err)
 	}
 
-	if err := run([]string{"deploy", "-f", path}); err != nil {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			t.Fatalf("unexpected method: %s", r.Method)
+		}
+		w.WriteHeader(http.StatusAccepted)
+	}))
+	defer server.Close()
+
+	if err := run([]string{"deploy", "-f", path, "--engine-url", server.URL}); err != nil {
 		t.Fatalf("deploy should succeed: %v", err)
 	}
 }

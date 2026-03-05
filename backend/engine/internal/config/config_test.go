@@ -16,7 +16,7 @@ func TestLoadDefaults(t *testing.T) {
 		t.Fatalf("unexpected defaults: %+v", cfg)
 	}
 
-	if cfg.WorkflowPath == "" || cfg.IngestSubject == "" {
+	if cfg.WorkflowPath == "" || cfg.IngestSubject == "" || cfg.APIAddr == "" {
 		t.Fatalf("expected workflow and subject defaults: %+v", cfg)
 	}
 }
