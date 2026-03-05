@@ -81,3 +81,6 @@
 ## Commit 28
 - feat(runtime): add support for TinyGo-compiled WASM plugins
 
+## Commit 29
+- fix: memory leak in WASM execution context
+

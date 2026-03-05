@@ -9,3 +9,5 @@ func SandboxEnabled() bool {
 }
 
 type StepData map[string][]byte
+
+func ReleaseContextBuffers() {}
