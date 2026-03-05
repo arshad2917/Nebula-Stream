@@ -3,7 +3,12 @@
 The High-Performance Edge-to-Cloud Distributed AI Orchestrator.
 
 [![Go Version](https://img.shields.io/badge/go-1.24-00ADD8.svg)](https://go.dev/)
-[![CI](https://img.shields.io/badge/ci-github_actions-24292e.svg)](./.github/workflows/ci.yml)
+[![CI](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/ci.yml/badge.svg)](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/codeql.yml/badge.svg)](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/codeql.yml)
+[![Scorecard](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/scorecard.yml/badge.svg)](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/scorecard.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-16a34a.svg)](./LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/erciktiburak/Nebula-Stream)](https://goreportcard.com/report/github.com/erciktiburak/Nebula-Stream)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/erciktiburak/Nebula-Stream/badge)](https://securityscorecards.dev/viewer/?uri=github.com/erciktiburak/Nebula-Stream)
 [![Release](https://img.shields.io/badge/release-v1.0.0--beta-2ea44f.svg)](./CHANGELOG.md)
 
 Nebula-Stream is an event-driven orchestration platform for microservices, AI workers, and serverless functions. It combines Go concurrency, NATS messaging, and WebAssembly sandboxing to execute workflow pipelines with low latency and strong isolation.
@@ -152,4 +157,4 @@ Commit-by-commit progress log: `docs/roadmap-progress.md`.
 
 ## License
 
-TBD
+MIT - see `LICENSE`.
