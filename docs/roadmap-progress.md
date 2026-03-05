@@ -60,3 +60,6 @@
 ## Commit 21
 - feat(runtime): allow data passing between WASM steps
 
+## Commit 22
+- feat(ai): add specialized worker node for ONNX AI models
+
