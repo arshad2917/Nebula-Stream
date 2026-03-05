@@ -42,3 +42,6 @@
 ## Commit 15
 - build: setup basic docker-compose for local development
 
+## Commit 16
+- feat(engine): implement YAML-based workflow parser
+
