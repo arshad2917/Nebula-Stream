@@ -138,3 +138,6 @@
 ## Commit 47
 - docs: final README with screenshots, GIFs and badges
 
+## Commit 48
+- build: setup github actions for automated multi-platform builds
+
