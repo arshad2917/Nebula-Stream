@@ -79,6 +79,16 @@ type ExecutionRecord = {
   results: ExecutionResult[]
 }
 
+export type ExecutionDetail = {
+  eventId: string
+  workflow: string
+  topic: string
+  startedAt: string
+  durationMs: number
+  stepCount: number
+  results: ExecutionResult[]
+}
+
 export async function triggerWorkflow(engineURL: string, workflow: string, message: string) {
   const url = `${engineURL.replace(/\/$/, '')}/api/v1/triggers`
   const resp = await fetch(url, {
@@ -112,6 +122,30 @@ export async function setActiveWorkflow(engineURL: string, workflow: string) {
   }
 
   return (await resp.json()) as { status: string; workflow: string }
+}
+
+function toExecutionDetail(record: ExecutionRecord): ExecutionDetail {
+  return {
+    eventId: record.event_id,
+    workflow: record.workflow,
+    topic: record.topic,
+    startedAt: record.started_at,
+    durationMs: record.duration_ms,
+    stepCount: record.step_count,
+    results: record.results,
+  }
+}
+
+export async function fetchExecutionByID(engineURL: string, eventID: string): Promise<ExecutionDetail> {
+  const url = `${engineURL.replace(/\/$/, '')}/api/v1/executions/${encodeURIComponent(eventID)}`
+  const resp = await fetch(url, { cache: 'no-store' })
+  if (!resp.ok) {
+    const body = await resp.text()
+    throw new Error(`execution fetch failed status=${resp.status} body=${body}`)
+  }
+
+  const raw = (await resp.json()) as ExecutionRecord
+  return toExecutionDetail(raw)
 }
 
 function toNode(stepType: string): string {

@@ -8,6 +8,7 @@ This package contains a running Next.js demo for Nebula-Stream workflow visualiz
 - Mock real-time telemetry stream
 - Live control-plane polling for workflow and latest execution
 - Execution history timeline from control-plane (`/api/v1/executions/history`)
+- Click any history item to load execution step outputs (`/api/v1/executions/{eventID}`)
 - Manual trigger button (`POST /api/v1/triggers`)
 - Workflow selector for targeting specific deployed workflows
 - Set active workflow button (`POST /api/v1/workflows/active`)

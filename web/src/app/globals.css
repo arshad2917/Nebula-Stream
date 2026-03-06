@@ -152,6 +152,14 @@ h1 {
   padding: 0.7rem;
 }
 
+.history-item {
+  cursor: pointer;
+}
+
+.history-item:hover {
+  border-color: #5d99c7;
+}
+
 .history-list li strong {
   display: block;
   font-size: 0.85rem;
@@ -167,6 +175,60 @@ h1 {
 .history-list li p {
   margin: 0.4rem 0 0;
   font-size: 0.84rem;
+}
+
+.detail-panel {
+  margin: 0.1rem 0.8rem 0.9rem;
+  border: 1px solid rgba(78, 107, 133, 0.45);
+  border-radius: 10px;
+  background: rgba(8, 22, 36, 0.65);
+  padding: 0.8rem;
+}
+
+.detail-panel h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.detail-panel p {
+  color: var(--text-muted);
+  margin: 0.45rem 0 0;
+  font-size: 0.82rem;
+}
+
+.step-detail-list {
+  list-style: none;
+  margin: 0.7rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.step-detail-list li {
+  border: 1px solid rgba(78, 107, 133, 0.45);
+  border-radius: 8px;
+  padding: 0.55rem;
+}
+
+.step-detail-list li strong {
+  font-size: 0.82rem;
+}
+
+.step-detail-list li span {
+  margin-left: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.step-detail-list li pre {
+  margin: 0.45rem 0 0;
+  padding: 0.45rem;
+  border-radius: 6px;
+  background: rgba(9, 19, 31, 0.9);
+  color: #c8def3;
+  font-size: 0.7rem;
+  white-space: pre-wrap;
+  overflow-x: auto;
 }
 
 .stat-card {

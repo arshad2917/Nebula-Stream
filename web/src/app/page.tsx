@@ -2,7 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import { WorkflowCanvas } from '@/react-flow'
-import { setActiveWorkflow, triggerWorkflow, useTelemetryFeed } from '@/telemetry-socket'
+import {
+  fetchExecutionByID,
+  setActiveWorkflow,
+  triggerWorkflow,
+  useTelemetryFeed,
+  type ExecutionDetail,
+} from '@/telemetry-socket'
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
@@ -18,6 +24,8 @@ export default function Page() {
   const [selectedWorkflow, setSelectedWorkflow] = useState('hello-world')
   const [triggerStatus, setTriggerStatus] = useState('')
   const [activeStatus, setActiveStatus] = useState('')
+  const [executionDetail, setExecutionDetail] = useState<ExecutionDetail | null>(null)
+  const [detailStatus, setDetailStatus] = useState('')
 
   useEffect(() => {
     if (!telemetry.workflows.length) {
@@ -50,6 +58,19 @@ export default function Page() {
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'unknown active workflow error'
       setActiveStatus(msg)
+    }
+  }
+
+  const handleHistoryClick = async (eventID: string) => {
+    const engineURL = process.env.NEXT_PUBLIC_ENGINE_URL || 'http://127.0.0.1:8080'
+    setDetailStatus('loading execution detail...')
+    try {
+      const detail = await fetchExecutionByID(engineURL, eventID)
+      setExecutionDetail(detail)
+      setDetailStatus('')
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'unknown detail error'
+      setDetailStatus(msg)
     }
   }
 
@@ -137,7 +158,7 @@ export default function Page() {
             <li>no execution history yet</li>
           ) : (
             telemetry.history.map((item) => (
-              <li key={item.eventId}>
+              <li key={item.eventId} onClick={() => handleHistoryClick(item.eventId)} className="history-item">
                 <strong>{item.workflow}</strong>
                 <span>{item.eventId}</span>
                 <p>{item.durationMs} ms</p>
@@ -145,6 +166,27 @@ export default function Page() {
             ))
           )}
         </ul>
+        <div className="detail-panel">
+          {executionDetail ? (
+            <>
+              <h3>Execution Detail</h3>
+              <p>
+                {executionDetail.workflow} · {executionDetail.eventId} · {executionDetail.durationMs} ms
+              </p>
+              <ul className="step-detail-list">
+                {executionDetail.results.map((step) => (
+                  <li key={step.id}>
+                    <strong>{step.id}</strong>
+                    <span>{step.type}</span>
+                    <pre>{JSON.stringify(step.output ?? {}, null, 2)}</pre>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <p>{detailStatus || 'click an execution card to inspect step outputs'}</p>
+          )}
+        </div>
       </section>
     </main>
   )
